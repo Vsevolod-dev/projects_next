@@ -1,7 +1,40 @@
+import { FolderOutlined, UserOutlined } from "@ant-design/icons";
+import { useRouter } from 'next/router'
+import { Menu, MenuProps } from "antd";
+import { useState } from "react";
+import styles from "@/styles/Header.module.scss"
+
+const items: MenuProps['items'] = [
+    {
+      label: 'Проекты',
+      key: 'projects',
+      icon: <FolderOutlined />,
+    },
+    {
+        label: 'Профиль',
+        key: 'profile',
+        icon: <UserOutlined />,
+    },
+    {
+        label: 'Вход',
+        key: 'login',
+        icon: <UserOutlined />,
+    },
+  ];
+
 const Header = () => {
+    const router = useRouter()
+    const keyFromRoute = router.pathname.split('/')[1]
+    const [current, setCurrent] = useState(keyFromRoute || 'projects');
+
+    const onClick: MenuProps['onClick'] = (e) => {
+        setCurrent(e.key);
+        router.push(`/${e.key}`)
+    };
+
     return (
-        <header>
-            <h2>Header</h2>
+        <header className={styles.container}>
+            <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
         </header>
     )
 }

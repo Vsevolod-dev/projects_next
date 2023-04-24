@@ -8,7 +8,11 @@
 .container {
   max-width: 1100px;
   margin: auto;
-  padding: 20px 30px;
+  padding: 0 30px;
+}
+
+h1 {
+  margin: 20px 0px;
 }
 
 .ant-card-meta-description {
@@ -20,12 +24,12 @@
   transition: transform 0.3s ease-out;
 }
 
-.ant-card:hover {
-  .ant-card-meta-description {
-    transform: translateY(0);
-  }
+.ant-card:hover .ant-card-meta-description {
+  transform: translateY(0);
 }
 
 .swiper-wrapper {
   align-items: center;
 }
+
+/*# sourceMappingURL=globals.css.map */

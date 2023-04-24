@@ -8,8 +8,10 @@
 
 .card {
   cursor: pointer;
-  &__image {
-    max-height: 225px;
-    object-fit: cover;
-  }
 }
+.card__image {
+  max-height: 225px;
+  object-fit: cover;
+}
+
+/*# sourceMappingURL=Projects.module.css.map */
