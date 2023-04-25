@@ -2,7 +2,7 @@ import { FolderOutlined, UserOutlined } from "@ant-design/icons";
 import { useRouter } from 'next/router'
 import { Menu, MenuProps } from "antd";
 import { useState } from "react";
-import styles from "@/styles/Header.module.scss"
+
 
 const items: MenuProps['items'] = [
     {
@@ -20,7 +20,7 @@ const items: MenuProps['items'] = [
         key: 'login',
         icon: <UserOutlined />,
     },
-  ];
+];
 
 const Header = () => {
     const router = useRouter()
@@ -33,8 +33,14 @@ const Header = () => {
     };
 
     return (
-        <header className={styles.container}>
-            <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
+        <header>
+            <Menu 
+                className="header__content" 
+                onClick={onClick} 
+                selectedKeys={[current]} 
+                mode="horizontal" 
+                items={items} 
+            />
         </header>
     )
 }

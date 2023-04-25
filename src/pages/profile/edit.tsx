@@ -1,17 +1,15 @@
-import { Avatar, Button, Form, Input, Layout, Select } from "antd"
+import { Avatar, Form, Input, Layout } from "antd"
 import { FC } from "react"
 import cookie from "cookie"
 import axios from "axios"
 import styles from "@/styles/Profile.module.scss"
-import { CheckSquareOutlined, GithubOutlined, InstagramOutlined } from "@ant-design/icons"
-import Image from 'next/image'
+import { CheckSquareOutlined } from "@ant-design/icons"
 import { ProfileComponentType } from "@/types"
-import { getCookie, getCookies } from "cookies-next"
+import { getCookie } from "cookies-next"
 import { useRouter } from "next/router"
 
 
 const { Content, Sider } = Layout
-const { Option } = Select;
 
 export const getServerSideProps = async (context) => {
     let token = ''
@@ -57,10 +55,14 @@ const EditProfile: FC<ProfileComponentType> = ({profile}) => {
     }
 
     return (
-        <Form onFinish={onFinish} initialValues={profile} form={form}>
+        <Form onFinish={onFinish} initialValues={profile} form={form} layout="vertical">
             <Layout className={styles.profile__wrapper}>
                 <Sider theme="light" className={styles.profile__sider}>
-                    <Avatar src={'https://xsgames.co/randomusers/avatar.php?g=pixel'} size={70}/>
+                    <Avatar 
+                        src={'https://xsgames.co/randomusers/avatar.php?g=pixel'} 
+                        size={70}
+                        className={styles.profile__avatar}
+                    />
                     <Form.Item
                         label="Имя пользователя"
                         name="name"
@@ -74,9 +76,7 @@ const EditProfile: FC<ProfileComponentType> = ({profile}) => {
                     >
                         <Input />
                     </Form.Item>
-                    {/* <Button htmlType="submit"> */}
-                        <CheckSquareOutlined onClick={form.submit} className={styles.icon} />
-                    {/* </Button> */}
+                    <CheckSquareOutlined onClick={form.submit} className={styles.icon} />
                 </Sider>
                 <Content className={styles.profile__content}>
                     <h3>Информация</h3>
@@ -97,7 +97,6 @@ const EditProfile: FC<ProfileComponentType> = ({profile}) => {
                         </Form.Item>
                     </div>
 
-                    <GithubOutlined className={styles.icon}/>
                     <Form.Item
                         label="Github"
                         name="github"
@@ -105,7 +104,6 @@ const EditProfile: FC<ProfileComponentType> = ({profile}) => {
                         <Input />
                     </Form.Item>
 
-                    <InstagramOutlined className={styles.icon}/>
                     <Form.Item
                         label="Инстаграм"
                         name="instagram"
@@ -113,7 +111,6 @@ const EditProfile: FC<ProfileComponentType> = ({profile}) => {
                         <Input />
                     </Form.Item>
 
-                    <Image className={styles.icon} src="/telegram-50.svg" alt="telegram" width={26} height={26}/>
                     <Form.Item
                         label="Телеграм"
                         name="telegram"

@@ -46,10 +46,14 @@ const Profile: FC<ProfileComponentType> = ({profile, owner}) => {
     return (
         <Layout className={styles.profile__wrapper}>
             <Sider theme="light" className={styles.profile__sider}>
-                <Avatar src={'https://xsgames.co/randomusers/avatar.php?g=pixel'} size={70}/>
+                <Avatar 
+                    src={'https://xsgames.co/randomusers/avatar.php?g=pixel'} 
+                    size={70}
+                    className={styles.profile__avatar}
+                />
                 <h3>{profile.name}</h3>
                 <p>{profile.job}</p>
-                {owner && <EditOutlined className={styles.icon} onClick={() => router.push('/profile/edit')}/>}
+                {owner && <EditOutlined className={styles.icon + " " + styles.icon__edit} onClick={() => router.push('/profile/edit')}/>}
             </Sider>
             <Content className={styles.profile__content}>
                 <h3>Информация</h3>
@@ -58,9 +62,11 @@ const Profile: FC<ProfileComponentType> = ({profile, owner}) => {
                     <div className={styles.info__email}><strong>Email</strong> {profile.email}</div>
                     <div className={styles.info__phone}><strong>Phone</strong> {profile.phone}</div>
                 </div>
-                {profile.github && <a href={profile.github.includes('http') ? profile.github : ('https://' + profile.github)} className={styles.link} target="_blank"><GithubOutlined className={styles.icon} href="vk.com"/></a>}
-                {profile.instagram && <a href={profile.instagram.includes('http') ? profile.instagram : ('https://' + profile.instagram)} className={styles.link} target="_blank"><InstagramOutlined className={styles.icon}/></a>}
-                {profile.telegram && <a href={profile.telegram.includes('http') ? profile.telegram : ('https://' + profile.telegram)} className={styles.link} target="_blank"><Image className={styles.icon} src="/telegram-50.svg" alt="telegram" width={26} height={26}/></a>}
+                <div className={styles.icons__row}>
+                    {profile.github && <a href={profile.github.includes('http') ? profile.github : ('https://' + profile.github)} className={styles.link} target="_blank"><GithubOutlined className={styles.icon} href="vk.com"/></a>}
+                    {profile.instagram && <a href={profile.instagram.includes('http') ? profile.instagram : ('https://' + profile.instagram)} className={styles.link} target="_blank"><InstagramOutlined className={styles.icon}/></a>}
+                    {profile.telegram && <a href={profile.telegram.includes('http') ? profile.telegram : ('https://' + profile.telegram)} className={styles.link} target="_blank"><Image className={styles.icon} src="/telegram-50.svg" alt="telegram" width={26} height={26}/></a>}
+                </div>
             </Content>
         </Layout>
     )

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, {FC} from "react";
 import {Project} from "@/types";
-import {Avatar, Card} from 'antd';
+import {Card} from 'antd';
 import styles from "@/styles/Projects.module.scss"
 import {useRouter} from "next/router";
 
@@ -21,13 +21,14 @@ export const getServerSideProps = async () => {
 
 const Projects: FC = ({projects}: { projects: Project[] }) => {
     const router = useRouter()
+
     const goToCard = (id: number) => {
         router.push(`/projects/${id}`)
     }
 
     return (
         <>
-            <h1>Projects</h1>
+            <h1>Проекты</h1>
             <div className={styles.projects__container}>
                 {projects && projects.map(project =>
                     <Card

@@ -2,14 +2,54 @@
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
-  margin: 0 30px;
-  justify-content: center;
 }
 
 .card {
   cursor: pointer;
   &__image {
-    max-height: 225px;
+    height: 225px;
     object-fit: cover;
   }
+}
+
+.author__title {
+  margin: 20px 0;
+}
+
+.author__avatar {
+  margin-right: 20px;
+}
+
+.author__link {
+  text-decoration: none;
+  color: black;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.author__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.project__description {
+  margin-bottom: 20px;
+}
+
+.btn__github {
+  margin-bottom: 20px;
+}
+
+.tags {
+  margin-bottom: 30px;
+  
+  h2 {
+    margin-bottom: 10px;
+  }
+}
+
+.btns {
+  display: flex;
+  column-gap: 10px;
 }
