@@ -10,16 +10,23 @@ const {Meta} = Card;
 export const getServerSideProps = async () => {
     try {
         const {data}: { data: Project[] } = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/projects`)
-        return {props: {projects: data}}
+        return {
+            props: {
+                projects: data
+            }
+        }
     } catch (e) {
         console.log(e)
         return {
-            props: {data: null}
+            props: {
+                projects: null
+            }
         }
     }
 }
+  
 
-const Projects: FC = ({projects}: { projects: Project[] }) => {
+const Projects: FC = ({projects}: { projects?: Project[] }) => {
     const router = useRouter()
 
     const goToCard = (id: number) => {

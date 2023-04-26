@@ -35,7 +35,7 @@ export const getServerSideProps = async (context) => {
             owner 
         }}
     } catch (e) {
-        console.log(e)
+        console.log(e);
         return {
             redirect: {
                 destination: '/404',
@@ -58,7 +58,7 @@ const Project: FC<ProjectType> = ({project, owner}) => {
         <>
             <h1>{project.title}</h1>
             <p className={styles.project__description}>{project.description}</p>
-            <Button className={styles.btn__github} type="primary"><a href={project.url} target={"_blank"}>Ссылка на Github</a></Button>
+            <Button className={styles.btn__github} type="primary"><a href={project.url.includes('http') ? project.url : `https://${project.url}`} target={"_blank"}>Ссылка на Github</a></Button>
             {project.tags &&
                 <div className={styles.tags}>
                     <h2>Теги</h2>

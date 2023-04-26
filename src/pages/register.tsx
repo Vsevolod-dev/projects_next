@@ -1,7 +1,9 @@
-import { Button, Form, Input } from "antd"
+import { Alert, Button, Form, Input } from "antd"
 import axios from "axios";
 import { setCookie } from "cookies-next";
 import Link from "next/link";
+import { useState } from "react";
+import styles from "@/styles/Register.module.scss"
 
 const layout = {
   labelCol: { span: 8 },
@@ -14,6 +16,7 @@ const tailLayout = {
 
 const Register = () => {
     const [form] = Form.useForm();
+    const [error, setError] = useState('')
   
     const onFinish = async (values: any) => {
       try {
@@ -22,17 +25,31 @@ const Register = () => {
         setCookie('token', data.token)
       } catch (e) {
         console.error(e);
+
+        switch (e.response.data.message) {
+          case "Password mismatch":
+            setError('Пароли не совпадают')
+            break
+          case "User with this email is already exist":
+            setError('Пользователь с таким email уже зарегистрирован')
+            break
+          default:
+            setError('Ошибка при регистрации')
+            break
+        }
+        setTimeout(() => setError(''), 3000)
       }
     };
 
     return (
-        <Form
+      <Form
             {...layout}
             form={form}
             name="control-hooks"
             onFinish={onFinish}
             style={{ maxWidth: 600 }}
         >
+          {error !== '' && <Alert className={styles.error} message={error} type="error" closable  />}
         <Form.Item name="name" label="Имя" rules={[{ required: true, message: 'Заполните поле!' }]}>
             <Input />
         </Form.Item>
@@ -54,7 +71,7 @@ const Register = () => {
             <Input.Password />
         </Form.Item>
         <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" className={styles.register_btn}>
           Регистрация
         </Button>
         <Link href={'login'}>Логин</Link>
