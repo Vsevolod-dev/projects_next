@@ -1,7 +1,12 @@
-import { FolderOutlined, UserOutlined } from "@ant-design/icons";
+import { FolderOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { useRouter } from 'next/router'
 import { Menu, MenuProps } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useProfileInfoQuery } from "@/store/services/authService";
+import { deleteCookie, getCookie } from "cookies-next";
+import { selectAuthState, setAuthState, setId, setName } from "@/store/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import styles from "@/styles/Menu.module.scss"
 
 
 const items: MenuProps['items'] = [
@@ -20,6 +25,11 @@ const items: MenuProps['items'] = [
         key: 'login',
         icon: <UserOutlined />,
     },
+    {
+        label: 'Выход',
+        key: 'logout',
+        icon: <LogoutOutlined />,
+    },
 ];
 
 const Header = () => {
@@ -27,7 +37,27 @@ const Header = () => {
     const keyFromRoute = router.pathname.split('/')[1]
     const [current, setCurrent] = useState(keyFromRoute || 'projects');
 
+    const token = getCookie('token')
+    const {data} = useProfileInfoQuery(token as string)
+    const authState = useSelector(selectAuthState);
+    const dispatch = useDispatch();
+
+
+    useEffect(() => {
+        if (data) {
+            dispatch(setAuthState(true))
+            dispatch(setName(data.name))
+            dispatch(setId(data.id))
+        }
+    }, [data, dispatch])
+
     const onClick: MenuProps['onClick'] = (e) => {
+        if (e.key === 'logout') {
+            deleteCookie('token')
+            router.push(`/projects`)
+            router.reload()
+            return
+        }
         setCurrent(e.key);
         router.push(`/${e.key}`)
     };
@@ -35,11 +65,15 @@ const Header = () => {
     return (
         <header>
             <Menu 
-                className="header__content" 
+                className={`header__content ${styles.menu}`}
                 onClick={onClick} 
                 selectedKeys={[current]} 
                 mode="horizontal" 
-                items={items} 
+                items={items.filter(item => {
+                    if (authState === true && item.key === 'login') return false
+                    if (authState === false && ['profile', 'logout'].includes(item.key as string)) return false
+                    return true
+                })} 
             />
         </header>
     )

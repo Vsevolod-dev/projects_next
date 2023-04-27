@@ -1,8 +1,9 @@
 import Layout from '@/components/Layout'
+import { wrapper } from '@/store/store'
 import '@/styles/globals.scss'
 import type { AppProps } from 'next/app'
 
-export default function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <Layout>
         <main className={'container'}>
@@ -11,3 +12,5 @@ export default function App({ Component, pageProps }: AppProps) {
     </Layout>
   )
 }
+
+export default wrapper.withRedux(App)
