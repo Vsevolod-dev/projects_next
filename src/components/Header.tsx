@@ -1,4 +1,4 @@
-import { FolderOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { FolderAddOutlined, FolderOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { useRouter } from 'next/router'
 import { Menu, MenuProps } from "antd";
 import { useEffect, useState } from "react";
@@ -19,6 +19,11 @@ const items: MenuProps['items'] = [
         label: 'Профиль',
         key: 'profile',
         icon: <UserOutlined />,
+    },
+    {
+        label: 'Новый проект',
+        key: 'projects/create',
+        icon: <FolderAddOutlined />,
     },
     {
         label: 'Вход',
@@ -57,12 +62,11 @@ const Header = () => {
             router.reload()
             return
         }
-        setCurrent(e.key);
         router.push(`/${e.key}`)
     };
 
     useEffect(() => {
-        const keyFromRoute = router.pathname.split('/')[1]
+        const keyFromRoute = router.pathname.slice(1)
         setCurrent(keyFromRoute)
     }, [router])
 
@@ -75,7 +79,7 @@ const Header = () => {
                 mode="horizontal" 
                 items={items.filter(item => {
                     if (authState === true && item.key === 'login') return false
-                    if (authState === false && ['profile', 'logout'].includes(item.key as string)) return false
+                    if (authState === false && ['profile', 'projects/create', 'logout'].includes(item.key as string)) return false
                     return true
                 })} 
             />

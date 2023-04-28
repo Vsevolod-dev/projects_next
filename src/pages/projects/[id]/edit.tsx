@@ -164,6 +164,7 @@ const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
                     allowClear
                     style={{ width: '100%' }}
                     placeholder="Пожалуйста выберите тэг"
+                    filterOption={(input, option) => (option?.label ?? '').includes(input)}
                     options={tags.map(tag => {
                         return {
                             label: tag.title,
