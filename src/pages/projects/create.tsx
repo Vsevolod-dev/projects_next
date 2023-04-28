@@ -8,24 +8,26 @@ import { getCookie } from "cookies-next"
 import dropzoneOptions from '@/utils/dropzoneOptions'
 import { useRouter } from "next/router"
 import styles from "@/styles/Projects.module.scss"
+import { requireAuthetication } from "@/utils/requireAuthentication";
 
-export const getServerSideProps = async () => {
-    try {
-        const {data: tags} = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/projects/tags`)
-
-        return {
-            props: { tags }
-        }
-    } catch (e) {
-        console.log(e)
-        return {
-            redirect: {
-                destination: '/404',
-                permanent: false,
+export const getServerSideProps = async (context) => {
+    return requireAuthetication(context, async () => {
+        try {
+            const {data: tags} = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/projects/tags`)
+    
+            return {
+                props: { tags }
             }
-        };
-
-    }
+        } catch (e) {
+            console.log(e)
+            return {
+                redirect: {
+                    destination: '/404',
+                    permanent: false,
+                }
+            };
+        }
+    })
 }
 
 type ProjectCreateType = {

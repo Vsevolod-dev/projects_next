@@ -40,6 +40,16 @@ header {
 
 .swiper-wrapper {
   align-items: center;
+  padding: 30px 40px;
+}
+
+.swiper-slide {
+  max-height: 200px;
+  text-align: center;
+
+  .ant-image-img {
+    max-height: 200px;
+  }
 }
 
 h1 {

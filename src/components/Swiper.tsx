@@ -30,7 +30,6 @@ const SwiperComponent: FC<SwiperComponentType> = ({images}) => {
                 images.map(image =>
                     <SwiperSlide key={image.id}>
                         <Image
-                            width={200}
                             src={process.env.NEXT_PUBLIC_API_HOST + '/image/' + image.path}
                         />
                     </SwiperSlide>

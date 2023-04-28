@@ -1,9 +1,13 @@
-import { getSession } from "next-auth/react"
+import cookie from "cookie"
 
 export const requireAuthetication = async (context, cb) => {
-    const session = await getSession(context)
-    console.log(session, 123);
-    if (!session) {
+    let token: string
+
+    if (context.req.headers.cookie) {
+        token = cookie.parse(context.req.headers.cookie).token
+    }
+
+    if (!token) {
         return {
             redirect: {
                 destination: '/login',

@@ -30,10 +30,12 @@ export const getServerSideProps = async (context) => {
             owner = true
         }
 
-        return {props: {
-            project: res.data, 
-            owner 
-        }}
+        return {
+            props: {
+                project: res.data,
+                owner
+            }
+        }
     } catch (e) {
         console.log(e);
         return {

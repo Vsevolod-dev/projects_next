@@ -8,35 +8,38 @@ import styles from "@/styles/Profile.module.scss"
 import { EditOutlined, GithubOutlined, InstagramOutlined } from "@ant-design/icons";
 import Image from 'next/image'
 import { useRouter } from "next/router";
+import { requireAuthetication } from "@/utils/requireAuthentication";
 
 
 export const getServerSideProps = async (context) => {
-    let token = ''
-    if (context.req.headers.cookie) {
-        token = cookie.parse(context.req.headers.cookie).token
-    }
-
-    try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/profile`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-
-        return {
-            props: {
-                profile: res.data,
-                owner: res.headers.user_by_token == res.data.id
-            }
+    return requireAuthetication(context, async () => {
+        let token = ''
+        if (context.req.headers.cookie) {
+            token = cookie.parse(context.req.headers.cookie).token
         }
-    } catch (e) {
-        return {
-            redirect: {
-                destination: '/login',
-                permanent: false,
+
+        try {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/profile`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            return {
+                props: {
+                    profile: res.data,
+                    owner: res.headers.user_by_token == res.data.id
+                }
             }
-        };
-    }
+        } catch (e) {
+            return {
+                redirect: {
+                    destination: '/login',
+                    permanent: false,
+                }
+            };
+        }
+    })
 }
 
 const Profile: FC<ProfileComponentType> = ({profile, owner}) => {
