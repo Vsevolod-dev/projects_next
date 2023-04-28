@@ -9,8 +9,6 @@ import { getCookie } from "cookies-next"
 import { useRouter } from "next/router"
 
 
-const { Content, Sider } = Layout
-
 export const getServerSideProps = async (context) => {
     let token = ''
 
@@ -57,7 +55,7 @@ const EditProfile: FC<ProfileComponentType> = ({profile}) => {
     return (
         <Form onFinish={onFinish} initialValues={profile} form={form} layout="vertical">
             <Layout className={styles.profile__wrapper}>
-                <Sider theme="light" className={styles.profile__sider}>
+                <div className={styles.profile__sider}>
                     <Avatar 
                         src={'https://xsgames.co/randomusers/avatar.php?g=pixel'} 
                         size={70}
@@ -77,8 +75,8 @@ const EditProfile: FC<ProfileComponentType> = ({profile}) => {
                         <Input />
                     </Form.Item>
                     <CheckSquareOutlined onClick={form.submit} className={styles.icon} />
-                </Sider>
-                <Content className={styles.profile__content}>
+                </div>
+                <div className={styles.profile__content}>
                     <h3>Информация</h3>
                     <hr />
                     <div className={styles.profile__info}>
@@ -117,7 +115,7 @@ const EditProfile: FC<ProfileComponentType> = ({profile}) => {
                     >
                         <Input />
                     </Form.Item>
-                </Content>
+                </div>
             </Layout>
         </Form>
     )

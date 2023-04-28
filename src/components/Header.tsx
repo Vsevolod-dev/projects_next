@@ -34,8 +34,7 @@ const items: MenuProps['items'] = [
 
 const Header = () => {
     const router = useRouter()
-    const keyFromRoute = router.pathname.split('/')[1]
-    const [current, setCurrent] = useState(keyFromRoute || 'projects');
+    const [current, setCurrent] = useState('');
 
     const token = getCookie('token')
     const {data} = useProfileInfoQuery(token as string)
@@ -61,6 +60,11 @@ const Header = () => {
         setCurrent(e.key);
         router.push(`/${e.key}`)
     };
+
+    useEffect(() => {
+        const keyFromRoute = router.pathname.split('/')[1]
+        setCurrent(keyFromRoute)
+    }, [router])
 
     return (
         <header>

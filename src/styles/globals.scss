@@ -56,3 +56,15 @@ h1 {
     height: 100%;
   }
 }
+
+@media (max-width: 576px) {
+  .dropzone {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+  }
+
+  .dz-preview {
+    margin: auto;
+  }
+}

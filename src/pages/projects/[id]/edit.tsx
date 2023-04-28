@@ -8,6 +8,7 @@ import "dropzone/src/dropzone.scss"
 import { getCookie } from "cookies-next"
 import dropzoneOptions from '@/utils/dropzoneOptions'
 import { useRouter } from "next/router"
+import styles from "@/styles/Projects.module.scss"
 
 export const getServerSideProps = async (context) => {
     const id = context.params.id
@@ -77,7 +78,7 @@ interface CustomResponse {
     }
 }
 
-const ProjectEdit: FC<ProjectEditType> = ({project, owner, tags}) => {
+const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
     const [form] = Form.useForm()
     const dropzoneRef = useRef<HTMLDivElement>()
     const router = useRouter()
@@ -86,7 +87,7 @@ const ProjectEdit: FC<ProjectEditType> = ({project, owner, tags}) => {
     const onFinish = async (values) => {
         values.images = images.map(image => image.path)
         try {
-            const res = await axios.patch(`${process.env.NEXT_PUBLIC_API_HOST}/projects/${project.id}`, values, {
+            await axios.patch(`${process.env.NEXT_PUBLIC_API_HOST}/projects/${project.id}`, values, {
                 headers: {
                     Authorization: `Bearer ${getCookie('token')}`
                 }
@@ -178,7 +179,7 @@ const ProjectEdit: FC<ProjectEditType> = ({project, owner, tags}) => {
 
             <div id="previews" className="dropzone mt-3" ref={dropzoneRef}></div>
 
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" className={styles.submit}>
                     Сохранить
             </Button>
         </Form>

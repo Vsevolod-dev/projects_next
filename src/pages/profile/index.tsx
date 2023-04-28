@@ -1,6 +1,6 @@
 import axios from "axios";
 import cookie from "cookie"
-import {ProfileComponentType} from "@/types/index"
+import {ProfileComponentType} from "@/types"
 import {FC} from "react";
 import { Layout } from "antd";
 import {Avatar} from "antd";
@@ -9,7 +9,6 @@ import { EditOutlined, GithubOutlined, InstagramOutlined } from "@ant-design/ico
 import Image from 'next/image'
 import { useRouter } from "next/router";
 
-const { Content, Sider } = Layout
 
 export const getServerSideProps = async (context) => {
     let token = ''
@@ -45,7 +44,7 @@ const Profile: FC<ProfileComponentType> = ({profile, owner}) => {
 
     return (
         <Layout className={styles.profile__wrapper}>
-            <Sider theme="light" className={styles.profile__sider}>
+            <div className={styles.profile__sider}>
                 <Avatar 
                     src={'https://xsgames.co/randomusers/avatar.php?g=pixel'} 
                     size={70}
@@ -54,8 +53,8 @@ const Profile: FC<ProfileComponentType> = ({profile, owner}) => {
                 <h3>{profile.name}</h3>
                 <p>{profile.job}</p>
                 {owner && <EditOutlined className={styles.icon + " " + styles.icon__edit} onClick={() => router.push('/profile/edit')}/>}
-            </Sider>
-            <Content className={styles.profile__content}>
+            </div>
+            <div className={styles.profile__content}>
                 <h3>Информация</h3>
                 <hr />
                 <div className={styles.profile__info}>
@@ -67,7 +66,7 @@ const Profile: FC<ProfileComponentType> = ({profile, owner}) => {
                     {profile.instagram && <a href={profile.instagram.includes('http') ? profile.instagram : ('https://' + profile.instagram)} className={styles.link} target="_blank"><InstagramOutlined className={styles.icon}/></a>}
                     {profile.telegram && <a href={profile.telegram.includes('http') ? profile.telegram : ('https://' + profile.telegram)} className={styles.link} target="_blank"><Image className={styles.icon} src="/telegram-50.svg" alt="telegram" width={26} height={26}/></a>}
                 </div>
-            </Content>
+            </div>
         </Layout>
     )
 }

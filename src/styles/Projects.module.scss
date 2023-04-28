@@ -2,6 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
+  justify-content: space-around;
 }
 
 .card {
@@ -52,4 +53,8 @@
 .btns {
   display: flex;
   column-gap: 10px;
+}
+
+.submit {
+  margin-top: 15px;
 }
