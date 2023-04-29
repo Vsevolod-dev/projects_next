@@ -1,4 +1,4 @@
-import { FolderAddOutlined, FolderOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { FolderAddOutlined, FolderOutlined, LogoutOutlined, MenuOutlined, UserOutlined } from "@ant-design/icons";
 import { useRouter } from 'next/router'
 import { Menu, MenuProps } from "antd";
 import { useEffect, useState } from "react";
@@ -77,6 +77,7 @@ const Header = () => {
                 onClick={onClick} 
                 selectedKeys={[current]} 
                 mode="horizontal" 
+                expandIcon={<MenuOutlined />}
                 items={items.filter(item => {
                     if (authState === true && item.key === 'login') return false
                     if (authState === false && ['profile', 'projects/create', 'logout'].includes(item.key as string)) return false

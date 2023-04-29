@@ -78,3 +78,9 @@ h1 {
     margin: auto;
   }
 }
+
+.ant-form-item-label {
+  label {
+    min-width: 125px;
+  }
+}

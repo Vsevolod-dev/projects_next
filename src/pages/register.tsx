@@ -5,15 +5,6 @@ import Link from "next/link";
 import { useState } from "react";
 import styles from "@/styles/Register.module.scss"
 
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-};
-
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
-};
-
 const Register = () => {
     const [form] = Form.useForm();
     const [error, setError] = useState('')
@@ -43,11 +34,10 @@ const Register = () => {
 
     return (
       <Form
-            {...layout}
             form={form}
             name="control-hooks"
             onFinish={onFinish}
-            style={{ maxWidth: 600 }}
+            className={styles.form}
         >
           {error !== '' && <Alert className={styles.error} message={error} type="error" closable  />}
         <Form.Item name="name" label="Имя" rules={[{ required: true, message: 'Заполните поле!' }]}>
@@ -70,7 +60,7 @@ const Register = () => {
         >
             <Input.Password />
         </Form.Item>
-        <Form.Item {...tailLayout}>
+        <Form.Item>
         <Button type="primary" htmlType="submit" className={styles.register_btn}>
           Регистрация
         </Button>
