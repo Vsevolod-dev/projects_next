@@ -10,18 +10,22 @@ const Register = () => {
     const [form] = Form.useForm();
     const router = useRouter()
     const [error, setError] = useState(false)
+    const [requestProcessing, setRequestProcessing] = useState(false)
 
     const onFinish = async (values: any) => {
         try {
+            setRequestProcessing(true)
             const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/auth/login`, {
                 params: values
             })
 
+            setRequestProcessing(false)
             setCookie('token', data.token)
             router.push('/projects')
         } catch (e) {
             console.error(e);
             setError(true)
+            setRequestProcessing(false)
             setTimeout(() => setError(false), 3000)
         }
     };
@@ -45,7 +49,7 @@ const Register = () => {
                 <Input.Password />
             </Form.Item>
             <Form.Item>
-                <Button type="primary" htmlType="submit" className={styles.login_btn}>
+                <Button type="primary" htmlType="submit" className={styles.login_btn} disabled={requestProcessing}>
                     Войти
                 </Button>
                 <Link href={'register'}>Регистрация</Link>

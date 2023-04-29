@@ -8,16 +8,22 @@ import styles from "@/styles/Register.module.scss"
 const Register = () => {
     const [form] = Form.useForm();
     const [error, setError] = useState('')
+    const [requestProcessing, setRequestProcessing] = useState(false)
   
     const onFinish = async (values: any) => {
       try {
+        setRequestProcessing(true)
         const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_HOST}/auth/register`, values)
         
+        setRequestProcessing(false)
         setCookie('token', data.token)
       } catch (e) {
         console.error(e);
 
         switch (e.response.data.message) {
+          case "Email is not valid":
+            setError('Невалидный email')
+            break
           case "Password mismatch":
             setError('Пароли не совпадают')
             break
@@ -29,6 +35,7 @@ const Register = () => {
             break
         }
         setTimeout(() => setError(''), 3000)
+        setRequestProcessing(false)
       }
     };
 
@@ -61,7 +68,7 @@ const Register = () => {
             <Input.Password />
         </Form.Item>
         <Form.Item>
-        <Button type="primary" htmlType="submit" className={styles.register_btn}>
+        <Button type="primary" htmlType="submit" className={styles.register_btn} disabled={requestProcessing}>
           Регистрация
         </Button>
         <Link href={'login'}>Логин</Link>
