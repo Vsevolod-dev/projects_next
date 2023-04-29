@@ -1,4 +1,6 @@
-const options = {
+import { DropzoneOptions } from "dropzone"
+
+const options: DropzoneOptions = {
     url: `${process.env.NEXT_PUBLIC_API_HOST}/upload`,
     method: "post",
     parallelUploads: 10,
@@ -15,6 +17,8 @@ const options = {
     autoProcessQueue: true,
     addRemoveLinks: true,
     previewsContainer: "#previews",
+    dictDefaultMessage: "Для загрузки файлов, поместите их в данную область",
+    dictRemoveFile: "Удалить файл"
 }
 
 export default options

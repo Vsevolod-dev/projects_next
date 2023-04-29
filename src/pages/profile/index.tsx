@@ -62,7 +62,7 @@ const Profile: FC<ProfileComponentType> = ({profile, owner}) => {
                 <hr />
                 <div className={styles.profile__info}>
                     <div className={styles.info__email}><strong>Email</strong> {profile.email}</div>
-                    <div className={styles.info__phone}><strong>Phone</strong> {profile.phone}</div>
+                    {profile.phone && <div className={styles.info__phone}><strong>Phone</strong> {profile.phone}</div>}
                 </div>
                 <div className={styles.icons__row}>
                     {profile.github && <a href={profile.github.includes('http') ? profile.github : ('https://' + profile.github)} className={styles.link} target="_blank"><GithubOutlined className={styles.icon} href="vk.com"/></a>}

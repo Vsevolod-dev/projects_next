@@ -10,6 +10,8 @@ import dropzoneOptions from '@/utils/dropzoneOptions'
 import { useRouter } from "next/router"
 import styles from "@/styles/Projects.module.scss"
 
+const { TextArea } = Input;
+
 export const getServerSideProps = async (context) => {
     const id = context.params.id
     try {
@@ -106,7 +108,6 @@ const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
                 setImages(project.images)
 
                 //Populate any existing thumbnails
-                console.log(project.images);
                 if (project.images) {
                     for (let i = 0; i < project.images.length; i++) {
                         //@ts-ignore
@@ -144,10 +145,6 @@ const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
         })
     }, [])
 
-    useEffect(() => {
-        console.log(images);
-    }, [images])
-
     return (
         <Form form={form} layout="vertical" onFinish={onFinish}>
             <Form.Item label="Название проекта" name={"title"} initialValue={project.title}>
@@ -155,7 +152,7 @@ const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
             </Form.Item>
 
             <Form.Item label="Описание" name={"description"} initialValue={project.description}>
-                <Input/>
+                <TextArea autoSize={{ minRows: 3 }} />
             </Form.Item>
 
             <Form.Item label="Тэги" name={"tags"} initialValue={project.tags.map(tag => tag.id)}>

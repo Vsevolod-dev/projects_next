@@ -4,9 +4,11 @@ import { setCookie } from "cookies-next";
 import Link from "next/link";
 import { useState } from "react";
 import styles from "@/styles/Register.module.scss"
+import { useRouter } from "next/router";
 
 const Register = () => {
     const [form] = Form.useForm();
+    const router = useRouter()
     const [error, setError] = useState('')
     const [requestProcessing, setRequestProcessing] = useState(false)
   
@@ -17,6 +19,7 @@ const Register = () => {
         
         setRequestProcessing(false)
         setCookie('token', data.token)
+        router.push('/projects')
       } catch (e) {
         console.error(e);
 

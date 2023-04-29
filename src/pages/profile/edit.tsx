@@ -7,6 +7,7 @@ import { CheckSquareOutlined } from "@ant-design/icons"
 import { ProfileComponentType } from "@/types"
 import { getCookie } from "cookies-next"
 import { useRouter } from "next/router"
+import { KeyboardEvent } from "react"
 
 
 export const getServerSideProps = async (context) => {
@@ -49,11 +50,16 @@ const EditProfile: FC<ProfileComponentType> = ({profile}) => {
             }
         })
         router.push(`/profile`)
-        console.log(res);
+    }
+
+    const submitForm = (event: KeyboardEvent<HTMLFormElement>) => {
+        if (event.key === 'Enter') {
+            form.submit()
+        }
     }
 
     return (
-        <Form onFinish={onFinish} initialValues={profile} form={form} layout="vertical">
+        <Form onFinish={onFinish} initialValues={profile} form={form} layout="vertical" onKeyUp={(e) => submitForm(e)}>
             <Layout className={styles.profile__wrapper}>
                 <div className={styles.profile__sider}>
                     <Avatar 
