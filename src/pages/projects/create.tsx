@@ -10,6 +10,8 @@ import { useRouter } from "next/router"
 import styles from "@/styles/Projects.module.scss"
 import { requireAuthetication } from "@/utils/requireAuthentication";
 
+const {TextArea} = Input
+
 export const getServerSideProps = async (context) => {
     return requireAuthetication(context, async () => {
         try {
@@ -101,7 +103,7 @@ const ProjectCreate: FC<ProjectCreateType> = ({tags}) => {
             </Form.Item>
 
             <Form.Item label="Описание" name={"description"}>
-                <Input/>
+                <TextArea autoSize={{ minRows: 3 }} />
             </Form.Item>
 
             <Form.Item label="Тэги" name={"tags"}>

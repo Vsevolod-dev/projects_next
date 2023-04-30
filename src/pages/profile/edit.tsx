@@ -1,5 +1,5 @@
-import { Avatar, Form, Input, Layout } from "antd"
-import { FC } from "react"
+import { Alert, Avatar, Form, Input, Layout } from "antd"
+import { FC, useState } from "react"
 import cookie from "cookie"
 import axios from "axios"
 import styles from "@/styles/Profile.module.scss"
@@ -42,14 +42,35 @@ export const getServerSideProps = async (context) => {
 const EditProfile: FC<ProfileComponentType> = ({profile}) => {
     const [form] = Form.useForm()    
     const router = useRouter()
+    const [error, setError] = useState('')
 
     const onFinish = async (values) => {
-        const res = await axios.patch(`${process.env.NEXT_PUBLIC_API_HOST}/profile`, values, {
-            headers: {
-                Authorization: `Bearer ${getCookie('token')}`
-            }
-        })
-        router.push(`/profile`)
+        try {
+            const res = await axios.patch(`${process.env.NEXT_PUBLIC_API_HOST}/profile`, values, {
+                headers: {
+                    Authorization: `Bearer ${getCookie('token')}`
+                }
+            })
+            router.push(`/profile`)
+        } catch (e) {
+            if (e.response) {
+                switch (e.response.data.message) {
+                  case "Email is not valid":
+                    setError('Неверный email')
+                    break
+                  case "Phone is not valid":
+                    setError('Неверный номер телефона')
+                    break
+                  case "This email is in use by another user":
+                    setError('Пользователь с таким email уже зарегистрирован')
+                    break
+                  default:
+                    setError('Ошибка при регистрации')
+                    break
+                }
+              }
+              setTimeout(() => setError(''), 3000)
+        }
     }
 
     const submitForm = (event: KeyboardEvent<HTMLFormElement>) => {
@@ -60,6 +81,7 @@ const EditProfile: FC<ProfileComponentType> = ({profile}) => {
 
     return (
         <Form onFinish={onFinish} initialValues={profile} form={form} layout="vertical" onKeyUp={(e) => submitForm(e)}>
+            {error !== '' && <Alert className={'error'} message={error} type="error" closable  />}
             <Layout className={styles.profile__wrapper}>
                 <div className={styles.profile__sider}>
                     <Avatar 
@@ -89,6 +111,7 @@ const EditProfile: FC<ProfileComponentType> = ({profile}) => {
                         <Form.Item
                             label="Email"
                             name="email"
+                            rules={[{ required: true, message: 'Пожалуйста введите email!' }]}
                         >
                             <Input />
                         </Form.Item>

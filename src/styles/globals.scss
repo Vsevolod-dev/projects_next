@@ -84,3 +84,10 @@ h1 {
     min-width: 125px;
   }
 }
+
+.error {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  z-index: 1;
+}

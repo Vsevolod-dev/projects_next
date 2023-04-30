@@ -23,19 +23,21 @@ const Register = () => {
       } catch (e) {
         console.error(e);
 
-        switch (e.response.data.message) {
-          case "Email is not valid":
-            setError('Невалидный email')
-            break
-          case "Password mismatch":
-            setError('Пароли не совпадают')
-            break
-          case "User with this email is already exist":
-            setError('Пользователь с таким email уже зарегистрирован')
-            break
-          default:
-            setError('Ошибка при регистрации')
-            break
+        if (e.response) {
+          switch (e.response.data.message) {
+            case "Email is not valid":
+              setError('Невалидный email')
+              break
+            case "Password mismatch":
+              setError('Пароли не совпадают')
+              break
+            case "User with this email is already exist":
+              setError('Пользователь с таким email уже зарегистрирован')
+              break
+            default:
+              setError('Ошибка при регистрации')
+              break
+          }
         }
         setTimeout(() => setError(''), 3000)
         setRequestProcessing(false)
@@ -49,7 +51,7 @@ const Register = () => {
             onFinish={onFinish}
             className={styles.form}
         >
-          {error !== '' && <Alert className={styles.error} message={error} type="error" closable  />}
+          {error !== '' && <Alert className={'error'} message={error} type="error" closable  />}
         <Form.Item name="name" label="Имя" rules={[{ required: true, message: 'Заполните поле!' }]}>
             <Input />
         </Form.Item>
