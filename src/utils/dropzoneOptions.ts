@@ -1,4 +1,4 @@
-import { DropzoneOptions } from "dropzone"
+import { DropzoneOptions } from "dropzone";
 
 const options: DropzoneOptions = {
     url: `${process.env.NEXT_PUBLIC_API_HOST}/upload`,

@@ -1,0 +1,25 @@
+.item {
+    display: inline-flex;
+    border-radius: 2px;
+    border: 1px solid #eaeaea;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    width: 100px;
+    height: 100px;
+    padding: 4px;
+    box-sizing: border-box;
+    justify-content: center;
+}
+
+.thumbInner {
+    display: flex;
+    min-width: 0;
+    overflow: hidden;
+    justify-content: center;
+}
+
+.img {
+    display: block;
+    width: auto;
+    height: 100%;
+}

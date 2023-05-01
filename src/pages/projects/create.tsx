@@ -92,10 +92,6 @@ const ProjectCreate: FC<ProjectCreateType> = ({tags}) => {
         })
     }, [])
 
-    useEffect(() => {
-        console.log(images);
-    }, [images])
-
     return (
         <Form form={form} layout="vertical" onFinish={onFinish}>
             <Form.Item label="Название проекта" name={"title"}>

@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@dnd-kit/core": "^6.0.8",
+    "@dnd-kit/sortable": "^7.0.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/antd": "^1.0.0",
     "antd": "^5.4.4",
@@ -22,6 +24,7 @@
     "next-redux-wrapper": "^8.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-redux": "^8.0.5",
     "sass": "^1.62.0",
     "swiper": "^9.2.4"

@@ -58,3 +58,11 @@
 .submit {
   margin-top: 15px;
 }
+
+.thumbsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  justify-content: center;
+}

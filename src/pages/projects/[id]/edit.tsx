@@ -2,13 +2,14 @@ import { Image, Project, Tag } from "@/types"
 import { Button, Form, Input, Select } from "antd"
 import axios from "axios"
 import cookie from "cookie"
-import { FC, useEffect, useRef, useState } from "react"
-import Dropzone, { DropzoneFile } from "dropzone";
-import "dropzone/src/dropzone.scss"
+import { FC, useMemo, useState } from "react"
+// import "dropzone/src/dropzone.scss"
 import { getCookie } from "cookies-next"
-import dropzoneOptions from '@/utils/dropzoneOptions'
 import { useRouter } from "next/router"
 import styles from "@/styles/Projects.module.scss"
+import {useDropzone} from 'react-dropzone';
+import SortableImageList from "@/components/SortableImageList"
+import baseStyle from "@/utils/dropzoneStyles"
 
 const { TextArea } = Input;
 
@@ -71,23 +72,22 @@ type ProjectEditType = {
     tags: Tag[]
 }
 
-interface CustomResponse {
-    message: string, 
-    image: {
-        size: number,
-        originalFilename: string,
-        newFilename: string
-    }
-}
+// interface CustomResponse {
+//     message: string, 
+//     image: {
+//         size: number,
+//         originalFilename: string,
+//         newFilename: string
+//     }
+// }
 
 const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
     const [form] = Form.useForm()
-    const dropzoneRef = useRef<HTMLDivElement>()
     const router = useRouter()
-    const [images, setImages] = useState<Image[]>([])
 
     const onFinish = async (values) => {
-        values.images = images.map(image => image.path)
+        values.images = files.map(image => image.path)
+
         try {
             await axios.patch(`${process.env.NEXT_PUBLIC_API_HOST}/projects/${project.id}`, values, {
                 headers: {
@@ -100,7 +100,7 @@ const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
         }
     }
     
-    useEffect(() => {
+    /*useEffect(() => {
         new Dropzone(dropzoneRef.current, {
             ...dropzoneOptions,
             init: function() {
@@ -143,7 +143,30 @@ const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
                 })
             }
         })
-    }, [])
+    }, [])*/
+
+    const [files, setFiles] = useState(project.images);
+    const {getRootProps, getInputProps} = useDropzone({
+        accept: {
+        'image/*': []
+        },
+        onDropAccepted: async (acceptedFiles) => {
+            let file = acceptedFiles[0]
+            let formData = new FormData()
+            formData.append('filetoupload', file, file.name)
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_HOST}/upload`, formData)
+            
+            setFiles(p => [...p, {
+                name: res.data.image.originalFilename,
+                path: res.data.image.newFilename,
+                size: res.data.image.size
+            } as Image])
+        }
+    });
+
+    const style = useMemo(() => ({
+        ...baseStyle
+    }), []);
 
     return (
         <Form form={form} layout="vertical" onFinish={onFinish}>
@@ -175,7 +198,13 @@ const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
                 <Input/>
             </Form.Item>
 
-            <div id="previews" className="dropzone mt-3" ref={dropzoneRef}></div>
+            <div {...getRootProps({style, className: 'dropzone'})}>
+                <input {...getInputProps()} />
+                <p>Для загрузки файлов переташите их в данную область, или кликните по ней</p>
+                <aside className={styles.thumbsContainer}>
+                    <SortableImageList files={files} setFiles={setFiles}/>
+                </aside>
+            </div>
 
             <Button type="primary" htmlType="submit" className={styles.submit}>
                     Сохранить
