@@ -1,14 +1,15 @@
 import { Image, Project, Tag } from "@/types"
 import { Button, Form, Input, Select } from "antd"
 import axios from "axios"
-import { FC, useEffect, useRef, useState } from "react"
-import Dropzone from "dropzone";
+import { FC, useMemo, useState } from "react"
 import "dropzone/src/dropzone.scss"
 import { getCookie } from "cookies-next"
-import dropzoneOptions from '@/utils/dropzoneOptions'
 import { useRouter } from "next/router"
 import styles from "@/styles/Projects.module.scss"
 import { requireAuthetication } from "@/utils/requireAuthentication";
+import { useDropzone } from "react-dropzone";
+import baseStyle from "@/utils/dropzoneStyles";
+import SortableImageList from "@/components/SortableImageList";
 
 const {TextArea} = Input
 
@@ -35,16 +36,6 @@ export const getServerSideProps = async (context) => {
 type ProjectCreateType = {
     tags: Tag[]
 }
-
-interface CustomResponse {
-    message: string, 
-    image: {
-        size: number,
-        originalFilename: string,
-        newFilename: string
-    }
-}
-
 interface ResponseCreating {
     message: string
     project: Project
@@ -52,12 +43,11 @@ interface ResponseCreating {
 
 const ProjectCreate: FC<ProjectCreateType> = ({tags}) => {
     const [form] = Form.useForm()
-    const dropzoneRef = useRef<HTMLDivElement>()
     const router = useRouter()
-    const [images, setImages] = useState<Image[]>([])
+    const [files, setFiles] = useState<Image[]>([]);
 
     const onFinish = async (values) => {
-        values.images = images.map(image => image.path)
+        values.images = files.map(image => image.path)
 
         try {
             const {data}: {data: ResponseCreating} = await axios.post(`${process.env.NEXT_PUBLIC_API_HOST}/projects`, values, {
@@ -71,26 +61,27 @@ const ProjectCreate: FC<ProjectCreateType> = ({tags}) => {
         }
     }
     
-    useEffect(() => {
-        new Dropzone(dropzoneRef.current, {
-            ...dropzoneOptions,
-            init: function() {
-                this.on("removedfile", function(file) {
-                    const path = file.dataURL.split('/').pop()
-                    setImages(p => p.filter(image => image.path !== path))
-                });
-                this.on("success", (file, response: CustomResponse) => {
-                    if (response.image) {
-                        setImages(p => [...p, {
-                            size: response.image.size,
-                            name: response.image.originalFilename,
-                            path: response.image.newFilename,
-                        } as Image])
-                    }
-                })
-            }
-        })
-    }, [])
+    const {getRootProps, getInputProps} = useDropzone({
+        accept: {
+        'image/*': []
+        },
+        onDropAccepted: async (acceptedFiles) => {
+            let file = acceptedFiles[0]
+            let formData = new FormData()
+            formData.append('filetoupload', file, file.name)
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_HOST}/upload`, formData)
+            
+            setFiles(p => [...p, {
+                name: res.data.image.originalFilename,
+                path: res.data.image.newFilename,
+                size: res.data.image.size
+            } as Image])
+        }
+    });
+
+    const style = useMemo(() => ({
+        ...baseStyle
+    }), []);
 
     return (
         <Form form={form} layout="vertical" onFinish={onFinish}>
@@ -121,7 +112,13 @@ const ProjectCreate: FC<ProjectCreateType> = ({tags}) => {
                 <Input/>
             </Form.Item>
 
-            <div id="previews" className="dropzone mt-3" ref={dropzoneRef}></div>
+            <div {...getRootProps({style, className: 'dropzone'})}>
+                <input {...getInputProps()} />
+                <p>Для загрузки файлов переташите их в данную область, или кликните по ней</p>
+                <aside className={styles.thumbsContainer}>
+                    <SortableImageList files={files} setFiles={setFiles}/>
+                </aside>
+            </div>
 
             <Button type="primary" htmlType="submit" className={styles.submit}>
                     Сохранить

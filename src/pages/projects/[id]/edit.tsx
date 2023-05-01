@@ -3,7 +3,6 @@ import { Button, Form, Input, Select } from "antd"
 import axios from "axios"
 import cookie from "cookie"
 import { FC, useMemo, useState } from "react"
-// import "dropzone/src/dropzone.scss"
 import { getCookie } from "cookies-next"
 import { useRouter } from "next/router"
 import styles from "@/styles/Projects.module.scss"
@@ -72,18 +71,10 @@ type ProjectEditType = {
     tags: Tag[]
 }
 
-// interface CustomResponse {
-//     message: string, 
-//     image: {
-//         size: number,
-//         originalFilename: string,
-//         newFilename: string
-//     }
-// }
-
 const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
     const [form] = Form.useForm()
     const router = useRouter()
+    const [files, setFiles] = useState(project.images);
 
     const onFinish = async (values) => {
         values.images = files.map(image => image.path)
@@ -99,53 +90,7 @@ const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
             console.log(e);
         }
     }
-    
-    /*useEffect(() => {
-        new Dropzone(dropzoneRef.current, {
-            ...dropzoneOptions,
-            init: function() {
-                const myDropzone = this;
-                setImages(project.images)
 
-                //Populate any existing thumbnails
-                if (project.images) {
-                    for (let i = 0; i < project.images.length; i++) {
-                        //@ts-ignore
-                        const mockFile: DropzoneFile = {
-                            name: project.images[i].name,
-                            size: project.images[i].size,
-                            type: 'image/jpeg',
-                            status: Dropzone.ADDED,
-                            accepted: true,
-                            dataURL: `${process.env.NEXT_PUBLIC_API_HOST}/image/${project.images[i].path}`
-                        };
-
-                        myDropzone.emit("addedfile", mockFile);
-                        myDropzone.emit("thumbnail", mockFile, `${process.env.NEXT_PUBLIC_API_HOST}/image/${project.images[i].path}`);
-                        myDropzone.emit("complete", mockFile);
-
-                        myDropzone.files.push(mockFile);
-                    }
-                }
-
-                this.on("removedfile", function(file) {
-                    const path = file.dataURL.split('/').pop()
-                    setImages(p => p.filter(image => image.path !== path))
-                });
-                this.on("success", (file, response: CustomResponse) => {
-                    if (response.image) {
-                        setImages(p => [...p, {
-                            size: response.image.size,
-                            name: response.image.originalFilename,
-                            path: response.image.newFilename,
-                        } as Image])
-                    }
-                })
-            }
-        })
-    }, [])*/
-
-    const [files, setFiles] = useState(project.images);
     const {getRootProps, getInputProps} = useDropzone({
         accept: {
         'image/*': []
