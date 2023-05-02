@@ -39,6 +39,7 @@ const SwiperComponent: FC<SwiperComponentType> = ({images}) => {
                             alt={'image'}
                             onClick={() => setCurrentImage(id)}
                         />
+                        {image.desc && <p>{image.desc}</p>}
                     </SwiperSlide>
                 )
             }
@@ -48,14 +49,17 @@ const SwiperComponent: FC<SwiperComponentType> = ({images}) => {
                     onVisibleChange: (vis) => {
                         if (!vis) setCurrentImage(-1)
                     },
-                    current: currentImage
+                    current: currentImage,
+                    countRender: (current) => images[current - 1]?.desc
                 }}>
                     {images.map(image => 
-                        <Image 
-                            key={image.id} 
-                            src={process.env.NEXT_PUBLIC_API_HOST + '/image/' + image.path} 
-                            alt={'image'}
-                        />
+                        <div key={image.id} >
+                            <Image 
+                                height={800}
+                                src={process.env.NEXT_PUBLIC_API_HOST + '/image/' + image.path} 
+                                alt={'image'}
+                            />
+                        </div>
                     )}
                 </Image.PreviewGroup>
             </div>
