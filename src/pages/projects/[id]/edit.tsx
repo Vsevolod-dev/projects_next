@@ -129,7 +129,7 @@ const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
                     allowClear
                     style={{ width: '100%' }}
                     placeholder="Пожалуйста выберите тэг"
-                    filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                    filterOption={(input, option) => (option?.label.toLocaleLowerCase() ?? '').includes(input.toLocaleLowerCase())}
                     options={tags.map(tag => {
                         return {
                             label: tag.title,
