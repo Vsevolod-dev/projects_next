@@ -16,13 +16,18 @@ import {
 import SortableImageItem from "./SortableImageItem";
 import { Image } from "@/types";
 
+const activationConstraint = {
+  delay: 100,
+  tolerance: 100,
+}
+
 const SortableImageList: FC<{files: Image[], setFiles: Dispatch<SetStateAction<Image[]>>}> = ({files, setFiles}) => {
-  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+  const sensors = useSensors(useSensor(MouseSensor, {activationConstraint}), useSensor(TouchSensor, {activationConstraint}));
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const {active, over} = event;
     
-    if (active.id !== over.id) {
+    if (active && over && active.id !== over.id) {
       setFiles((files) => {
         const oldIndex = files.findIndex(file => file.name === active.id);
         const newIndex = files.findIndex(file => file.name === over.id);
@@ -32,22 +37,16 @@ const SortableImageList: FC<{files: Image[], setFiles: Dispatch<SetStateAction<I
     }
   }, []);
 
-  const removeFile = (e: React.MouseEvent<HTMLParagraphElement, MouseEvent>, fileName: string) => {
-    e.stopPropagation()
-    setFiles(p => [...p.filter(f => f.name !== fileName)])
-  }
-
   return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
     >
-      <SortableContext items={files.map(file => file.name)} strategy={rectSortingStrategy}>
+      <SortableContext items={files.map(file => file.name)} strategy={rectSortingStrategy} >
           {files && files.map((file, id) => (
-            <div key={id}>
-              <SortableImageItem file={file} id={id} />
-              <p onClick={(e) => removeFile(e, file.name)}>Удалить</p>
+            <div key={file.size}>
+              <SortableImageItem setFiles={setFiles} file={file} id={file.size}/>
             </div>
           ))}
       </SortableContext>

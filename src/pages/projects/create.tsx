@@ -2,7 +2,6 @@ import { Image, Project, Tag } from "@/types"
 import { Button, Form, Input, Select } from "antd"
 import axios from "axios"
 import { FC, useMemo, useState } from "react"
-import "dropzone/src/dropzone.scss"
 import { getCookie } from "cookies-next"
 import { useRouter } from "next/router"
 import styles from "@/styles/Projects.module.scss"
@@ -47,7 +46,10 @@ const ProjectCreate: FC<ProjectCreateType> = ({tags}) => {
     const [files, setFiles] = useState<Image[]>([]);
 
     const onFinish = async (values) => {
-        values.images = files.map(image => image.path)
+        values.images = files.map(image => ({
+            path: image.path,
+            desc: image.desc
+        }))
 
         try {
             const {data}: {data: ResponseCreating} = await axios.post(`${process.env.NEXT_PUBLIC_API_HOST}/projects`, values, {
@@ -99,6 +101,7 @@ const ProjectCreate: FC<ProjectCreateType> = ({tags}) => {
                     allowClear
                     style={{ width: '100%' }}
                     placeholder="Пожалуйста выберите тэг"
+                    filterOption={(input, option) => (option?.label.toLocaleLowerCase() ?? '').includes(input.toLocaleLowerCase())}
                     options={tags.map(tag => {
                         return {
                             label: tag.title,

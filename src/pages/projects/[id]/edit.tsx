@@ -77,7 +77,10 @@ const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
     const [files, setFiles] = useState(project.images);
 
     const onFinish = async (values) => {
-        values.images = files.map(image => image.path)
+        values.images = files.map(image => ({
+            path: image.path,
+            desc: image.desc
+        }))
 
         try {
             await axios.patch(`${process.env.NEXT_PUBLIC_API_HOST}/projects/${project.id}`, values, {

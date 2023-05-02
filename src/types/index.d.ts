@@ -3,6 +3,7 @@ export interface Image {
     name: string
     path: string
     size: number
+    desc?: desc
 }
 
 interface Tag {

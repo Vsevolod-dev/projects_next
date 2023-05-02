@@ -61,10 +61,10 @@ const Project: FC<ProjectType> = ({project, owner}) => {
         <>
             <h1>{project.title}</h1>
             <p className={styles.project__description}>{project.description}</p>
-            <Button className={styles.btn__github} type="primary"><a href={project.url.includes('http') ? project.url : `https://${project.url}`} target={"_blank"}>Ссылка на Github</a></Button>
-            {project.tags &&
+            {project.url && <Button className={styles.btn__github} type="primary"><a href={project.url.includes('http') ? project.url : `https://${project.url}`} target={"_blank"}>Ссылка на Github</a></Button>}
+            {project.tags.length > 0 &&
                 <div className={styles.tags}>
-                    <h2>Теги</h2>
+                    <h2>Тэги</h2>
                     {project.tags.map(tag => <Tag key={tag.id}>{tag.title}</Tag>)}
                 </div>
             }

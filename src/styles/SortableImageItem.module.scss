@@ -1,7 +1,5 @@
 .item {
-    display: inline-flex;
     border-radius: 2px;
-    border: 1px solid #eaeaea;
     margin-bottom: 8px;
     margin-right: 8px;
     width: 100px;
@@ -13,6 +11,7 @@
 
 .thumbInner {
     display: flex;
+    flex-direction: column;
     min-width: 0;
     overflow: hidden;
     justify-content: center;
@@ -20,6 +19,21 @@
 
 .img {
     display: block;
-    width: auto;
-    height: 100%;
+    width: fit-content;
+    margin: 0 auto 10px;
+    max-height: 75px;
+}
+
+.removeFile {
+    &:hover {
+        cursor: pointer;
+        color: burlywood;
+    }
+}
+
+.inputFile {
+    max-width: 90px;
+    height: 28px;
+    display: block;
+    margin: 0 auto;
 }
