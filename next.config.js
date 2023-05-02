@@ -13,9 +13,14 @@ const nextConfig = {
         remotePatterns: [
           {
             protocol: 'http',
-            hostname: '172.18.159.223',
+            hostname: '185.125.200.128',
             port: '3001',
             pathname: '/image/**',
+          },
+          {
+            protocol: 'https',
+            hostname: 'gw.alipayobjects.com',
+            pathname: '/zos/rmsportal/**',
           },
         ],
       },

@@ -63,7 +63,6 @@ const Projects: FC = ({projects, tags}: { projects: Project[], tags: Tag[] }) =>
     }
 
     useEffect(() => {
-        if (search === '' && selectedTags === undefined) return
         const fetchProjects = async () => {
             const {data}: { data: Project[] } = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/projects`, {
                 params: {
