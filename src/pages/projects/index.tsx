@@ -1,18 +1,22 @@
 import axios from "axios";
-import React, {FC} from "react";
-import {Project} from "@/types";
-import {Card} from 'antd';
+import React, {FC, useState} from "react";
+import {Project, Tag} from "@/types";
+import {Card, Input, Select} from 'antd';
 import styles from "@/styles/Projects.module.scss"
 import {useRouter} from "next/router";
+import Image from "next/image";
+import { useEffect } from "react";
 
 const {Meta} = Card;
 
 export const getServerSideProps = async () => {
     try {
-        const {data}: { data: Project[] } = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/projects`)
+        const {data: projects}: { data: Project[] } = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/projects`)
+        const {data: tags} = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/projects/tags`)
         return {
             props: {
-                projects: data
+                projects,
+                tags
             }
         }
     } catch (e) {
@@ -24,26 +28,70 @@ export const getServerSideProps = async () => {
         }
     }
 }
-  
 
-const Projects: FC = ({projects}: { projects?: Project[] }) => {
+const Projects: FC = ({projects, tags}: { projects: Project[], tags: Tag[] }) => {
+    const [localProjects, setLocalProjects] = useState<Project[]>(projects)
     const router = useRouter()
+    const [search, setSearch] = useState('')
+    const [selectedTags, setSelectedTags] = useState()
+
+    const selectAfter = (
+        <Select 
+            value={selectedTags} 
+            onChange={setSelectedTags} 
+            style={{width: 175}}
+            mode="multiple"
+            allowClear
+            placeholder="Выберите тэг"
+            maxTagCount='responsive'
+            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+            options={
+                tags ? tags.map(tag => ({
+                    label: tag.title,
+                    value: tag.id
+                })) : []
+            }
+        />
+    )
 
     const goToCard = (id: number) => {
         router.push(`/projects/${id}`)
     }
 
+    const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value)
+    }
+
+    useEffect(() => {
+        if (search === '' && selectedTags === undefined) return
+        const fetchProjects = async () => {
+            const {data}: { data: Project[] } = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/projects`, {
+                params: {
+                    title: search,
+                    description: search,
+                    url: search,
+                    tags: selectedTags
+                }
+            })
+            setLocalProjects(data)
+        }
+        fetchProjects()
+    }, [search, selectedTags])
+
     return (
         <>
             <h1>Проекты</h1>
             <div className={styles.projects__container}>
-                {projects && projects.map(project =>
+                <Input placeholder={"Введите имя проекта"} value={search} onChange={searchHandler} addonAfter={selectAfter}/>
+                {localProjects && localProjects.map(project =>
                     <Card
                         key={project.id}
                         style={{width: 300}}
                         cover={
-                            <img
+                            <Image
                                 alt="example"
+                                width={300}
+                                height={200}
                                 src={
                                     project.image
                                         ? process.env.NEXT_PUBLIC_API_HOST + "/image/" + project.image
