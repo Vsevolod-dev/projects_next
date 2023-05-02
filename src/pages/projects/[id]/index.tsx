@@ -22,6 +22,7 @@ export const getServerSideProps = async (context) => {
                 Authorization: token ? `Bearer ${token}` : null
             }
         })
+        
         let owner = false
         if (
             res.headers.user_by_token && res.data.user.id && 

@@ -2,6 +2,7 @@ import { CSSProperties } from "react";
 
 const baseStyle: CSSProperties = {
     padding: '20px',
+    marginBottom: '15px',
     borderWidth: 2,
     borderRadius: 2,
     borderColor: '#eeeeee',

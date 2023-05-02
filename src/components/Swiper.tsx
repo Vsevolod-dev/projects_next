@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {Navigation, Pagination} from "swiper";
 import {Image as ImageType} from "@/types";
@@ -14,6 +14,8 @@ type SwiperComponentType = {
 }
 
 const SwiperComponent: FC<SwiperComponentType> = ({images}) => {
+    const [currentImage, setCurrentImage] = useState(-1);
+
     return (
         <Swiper
             slidesPerView={3}
@@ -27,14 +29,36 @@ const SwiperComponent: FC<SwiperComponentType> = ({images}) => {
             className="mySwiper"
         >
             {
-                images.map(image =>
+                images.map((image, id) =>
                     <SwiperSlide key={image.id}>
                         <Image
+                            preview={{
+                                visible: false
+                            }}
                             src={process.env.NEXT_PUBLIC_API_HOST + '/image/' + image.path}
+                            alt={'image'}
+                            onClick={() => setCurrentImage(id)}
                         />
                     </SwiperSlide>
                 )
             }
+            <div style={{ display: 'none' }}>
+                <Image.PreviewGroup preview={{ 
+                    visible: currentImage !== -1 ? true : false,
+                    onVisibleChange: (vis) => {
+                        if (!vis) setCurrentImage(-1)
+                    },
+                    current: currentImage
+                }}>
+                    {images.map(image => 
+                        <Image 
+                            key={image.id} 
+                            src={process.env.NEXT_PUBLIC_API_HOST + '/image/' + image.path} 
+                            alt={'image'}
+                        />
+                    )}
+                </Image.PreviewGroup>
+            </div>
         </Swiper>
     )
 }

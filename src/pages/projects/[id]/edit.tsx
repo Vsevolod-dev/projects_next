@@ -100,7 +100,7 @@ const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
             let formData = new FormData()
             formData.append('filetoupload', file, file.name)
             const res = await axios.post(`${process.env.NEXT_PUBLIC_API_HOST}/upload`, formData)
-            
+
             setFiles(p => [...p, {
                 name: res.data.image.originalFilename,
                 path: res.data.image.newFilename,
@@ -150,10 +150,13 @@ const ProjectEdit: FC<ProjectEditType> = ({project, tags}) => {
                     <SortableImageList files={files} setFiles={setFiles}/>
                 </aside>
             </div>
-
-            <Button type="primary" htmlType="submit" className={styles.submit}>
-                    Сохранить
-            </Button>
+            
+            <div className={styles.btns}>
+                <Button onClick={router.back}>Назад</Button>
+                <Button type="primary" htmlType="submit">
+                        Сохранить
+                </Button>
+            </div>
         </Form>
     )
 }
