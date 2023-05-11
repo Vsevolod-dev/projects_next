@@ -6,6 +6,7 @@ import styles from "@/styles/Projects.module.scss"
 import {useRouter} from "next/router";
 import Image from "next/image";
 import { useEffect } from "react";
+import useDebounce from "@/hooks/useDebounce";
 
 const {Meta} = Card;
 
@@ -32,8 +33,12 @@ export const getServerSideProps = async () => {
 const Projects: FC = ({projects, tags}: { projects: Project[], tags: Tag[] }) => {
     const [localProjects, setLocalProjects] = useState<Project[]>(projects)
     const router = useRouter()
+
     const [search, setSearch] = useState('')
+    const debouncedSearch: string = useDebounce<string>(search, 500);
+
     const [selectedTags, setSelectedTags] = useState()
+    const debouncedSelectedTags: string = useDebounce<string>(selectedTags, 500);
 
     const selectAfter = (
         <Select 
@@ -66,16 +71,16 @@ const Projects: FC = ({projects, tags}: { projects: Project[], tags: Tag[] }) =>
         const fetchProjects = async () => {
             const {data}: { data: Project[] } = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/projects`, {
                 params: {
-                    title: search,
-                    description: search,
-                    url: search,
-                    tags: selectedTags
+                    title: debouncedSearch,
+                    description: debouncedSearch,
+                    url: debouncedSearch,
+                    tags: debouncedSelectedTags
                 }
             })
             setLocalProjects(data)
         }
         fetchProjects()
-    }, [search, selectedTags])
+    }, [debouncedSearch, debouncedSelectedTags])
 
     return (
         <>

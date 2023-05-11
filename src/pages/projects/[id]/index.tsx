@@ -60,7 +60,7 @@ const Project: FC<ProjectType> = ({project, owner}) => {
     return (
         <>
             <h1>{project.title}</h1>
-            <p className={styles.project__description}>{project.description}</p>
+            <p className={styles.project__description} dangerouslySetInnerHTML={{__html: project.description.replace(/\n/g, "<br />")}}/>
             {project.url && <Button className={styles.btn__github} type="primary"><a href={project.url.includes('http') ? project.url : `https://${project.url}`} target={"_blank"}>Ссылка на Github</a></Button>}
             {project.tags.length > 0 &&
                 <div className={styles.tags}>

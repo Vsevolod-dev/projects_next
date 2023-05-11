@@ -45,6 +45,7 @@ const EditProfile: FC<ProfileComponentType> = ({profile}) => {
     const [error, setError] = useState('')
 
     const onFinish = async (values) => {
+        values.phone = values.phone.replace(/[^0-9]/g, "")
         try {
             const res = await axios.patch(`${process.env.NEXT_PUBLIC_API_HOST}/profile`, values, {
                 headers: {
